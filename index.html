@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для мамы ❤️</title>
+    <!-- Подключаем красивые шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Основные стили и переменные */
+        :root {
+            --bg-color-start: #fff0f5; /* Нежно-пудровый */
+            --bg-color-end: #ffe4e1;   /* Светло-коралловый/кремовый */
+            --text-color: #5a4a4a;     /* Мягкий коричнево-серый для чтения */
+            --accent-color: #e57373;   /* Тёплый кораллово-розовый */
+            --gold-accent: #d4af37;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color-start) 0%, var(--bg-color-end) 100%);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Контейнер для фона с сердечками */
+        #hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Центральный контейнер сайта */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Заголовки */
+        h1, h2 {
+            font-family: 'Caveat', cursive;
+            color: var(--accent-color);
+            margin: 0 0 30px 0;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(229, 115, 115, 0.1);
+        }
+
+        /* Текстовые блоки */
+        .text-block {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 15px 35px rgba(229, 115, 115, 0.05);
+            backdrop-filter: blur(5px);
+            max-width: 800px;
+        }
+
+        .text-block p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .text-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Блок с фотографиями */
+        .photo-block {
+            margin-bottom: 60px;
+            position: relative;
+            max-width: 100%;
+        }
+
+        .photo-wrapper {
+            position: relative;
+            display: inline-block;
+            padding: 12px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(229, 115, 115, 0.15);
+        }
+
+        .photo-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+            max-height: 70vh;
+            object-fit: cover;
+        }
+
+        /* Декоративные сердечки на углах рамки */
+        .corner-heart {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            fill: var(--accent-color);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .top-left { top: -15px; left: -15px; transform: rotate(-15deg); }
+        .top-right { top: -15px; right: -15px; transform: rotate(15deg); }
+        .bottom-left { bottom: -15px; left: -15px; transform: rotate(-15deg); }
+        .bottom-right { bottom: -15px; right: -15px; transform: rotate(15deg); }
+
+        /* Финальный блок */
+        .footer-block {
+            margin-top: 20px;
+            padding: 30px;
+        }
+        
+        .footer-block .signature {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            color: var(--accent-color);
+        }
+
+        /* Анимации появления при скролле */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                        transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Анимация летящих сердечек на фоне */
+        .flying-heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 1.5rem;
+            color: rgba(229, 115, 115, 0.3);
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Адаптивность для телефонов */
+        @media (max-width: 600px) {
+            .container { padding: 30px 15px; }
+            .text-block { padding: 25px 20px; border-radius: 20px; }
+            .corner-heart { width: 28px; height: 28px; }
+            .top-left { top: -10px; left: -10px; }
+            .top-right { top: -10px; right: -10px; }
+            .bottom-left { bottom: -10px; left: -10px; }
+            .bottom-right { bottom: -10px; right: -10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Контейнер для фоновых сердечек -->
+    <div id="hearts-bg"></div>
+
+    <div class="container">
+        <!-- Заголовок -->
+        <header class="fade-in">
+            <h1>Для самой любимой мамы ❤️</h1>
+        </header>
+
+        <!-- Первый текстовый блок -->
+        <section class="text-block fade-in">
+            <p>Этот маленький сайт — просто напоминание о том, как сильно, искренне и безгранично я тебя люблю. Каждый день я благодарю судьбу за то, что именно ты — моя мама.</p>
+            <p>Твои руки — самые нежные, твои объятия — самые уютные, а твоя улыбка способна разогнать любые тучи. В этом суетливом мире твоя любовь — это мой светлый маяк, который всегда указывает путь туда, где безопасно и где меня всегда ждут.</p>
+            <p>Спасибо тебе за твою заботу, тепло, невероятную поддержку и за то, что ты всегда рядом, несмотря ни на что. Ты — мой самый родной человек и моё самое тёплое место на земле. Я очень тебя люблю, мамочка!</p>
+        </section>
+
+        <!-- Первое фото -->
+        <section class="photo-block fade-in">
+            <div class="photo-wrapper">
+                <!-- SVG Сердечки по углам -->
+                <svg class="corner-heart top-left" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="corner-heart top-right" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="corner-heart bottom-left" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="corner-heart bottom-right" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                
+                <!-- Само фото -->
+                <img src="IMG_6680.jpeg" alt="Любимая мама">
+            </div>
+        </section>
+
+        <!-- Второе фото -->
+        <section class="photo-block fade-in">
+            <div class="photo-wrapper">
+                <svg class="corner-heart top-left" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="corner-heart top-right" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="corner-heart bottom-left" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg class="corner-heart bottom-right" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                
+                <img src="IMG_6682.jpeg" alt="Мы с мамой">
+            </div>
+        </section>
+
+        <!-- Второй текстовый блок -->
+        <section class="text-block fade-in">
+            <p>Мамочка ❤️ Здесь мы — твои дети, рядом с тобой.</p>
+            <p>Твоя мудрость, твое бесконечное терпение и вера в нас дают нам крылья и силы идти вперед. Мы — твое продолжение, и каждая наша радость — это твоя заслуга. Спасибо за ту волшебную атмосферу любви и уюта, которую ты создаешь вокруг себя.</p>
+            <p>Мы обещаем всегда беречь тебя так же нежно, как ты берегла нас с самого детства. Спасибо за то, что ты всегда рядом. Мы очень-очень тебя любим!</p>
+        </section>
+
+        <!-- Финал -->
+        <footer class="footer-block fade-in">
+            <div class="signature">С бесконечной любовью и нежностью, твои дети ❤️</div>
+            <p style="font-size: 1.2rem; margin-top: 15px; opacity: 0.9;">Пусть каждый твой день будет наполнен радостью, а глаза всегда светятся от счастья.</p>
+        </footer>
+    </div>
+
+    <!-- Скрипты для анимаций -->
+    <script>
+        // Анимация появления элементов при прокрутке страницы
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Анимируем только один раз
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Создание летящих сердечек на фоне
+        const heartsBg = document.getElementById('hearts-bg');
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('flying-heart');
+            
+            // Выбираем случайный эмодзи сердечка для разнообразия
+            const hearts = ['❤️', '💖', '🌸', '✨'];
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            
+            // Случайная позиция по горизонтали
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            // Случайная скорость (от 8 до 15 секунд)
+            heart.style.animationDuration = (Math.random() * 7 + 8) + 's';
+            
+            // Случайный размер
+            heart.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+            
+            heartsBg.appendChild(heart);
+            
+            // Удаляем сердечко после завершения анимации, чтобы не засорять память
+            setTimeout(() => {
+                heart.remove();
+            }, 15000);
+        }
+
+        // Создаем новые сердечки каждые 800 миллисекунд
+        setInterval(createHeart, 800);
+        
+        // Сразу добавляем несколько сердечек при загрузке
+        for(let i=0; i<5; i++) {
+            setTimeout(createHeart, i * 200);
+        }
+    </script>
+</body>
+</html>
